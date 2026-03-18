@@ -1,10 +1,10 @@
-# Dialysis Care Plan Taskboard
+Dialysis Care Plan Taskboard
 
 A React/TypeScript taskboard for managing dialysis patient care plan tasks across clinical staff workflows, with optimistic updates, DTO parsing, and resilient failure handling.
 
 ---
 
-## Features
+Features
 
 - React + TypeScript frontend for dialysis care plan task management
 - Clear separation of API client, DTO parsing, state hooks, and UI components
@@ -15,7 +15,7 @@ A React/TypeScript taskboard for managing dialysis patient care plan tasks acros
 
 ---
 
-## Quick start
+Quick start
 
 ```bash
 npm install
@@ -34,7 +34,7 @@ VITE_USE_MOCK_API=true
 
 ---
 
-## Architecture
+Architecture
 
 ```
 src/
@@ -78,29 +78,29 @@ src/
 
 ---
 
-## Key design decisions
+Key design decisions
 
-### Two-type pattern (DTO + Domain)
+Two-type pattern (DTO + Domain)
 `TaskDTO` mirrors the raw API (every field optional `string | undefined`). `Task` is the domain model (every field required, typed). The `parseTask` function is the **only** place that handles bad data — everything downstream is guaranteed clean.
 
-### Optimistic UI mutation
+Optimistic UI mutation
 `useUpdateTaskStatus` follows three phases:
 1. `onMutate` — cancel in-flight queries, snapshot cache, apply update immediately
 2. `onError` — restore snapshot verbatim, fire error toast
 3. `onSettled` — always invalidate (runs on both success and error)
 
-### Null-Object / default factory
+Null-Object / default factory
 `createDefaultTask()` is the single source of fallback values. The UI never needs `task?.title ?? "Unknown"` — it's handled once at the parser boundary.
 
-### Partial failure handling
+Partial failure handling
 Patient and task failures are isolated so one failing query does not take down the entire screen. In local development, unreachable API calls can fall back to bundled mock data.
 
-### Error Boundary
+Error Boundary
 `TaskErrorBoundary` wraps the task list in `CareBoard.tsx`. A render crash in the task list shows a recovery UI without taking down the patient header or the rest of the page. Wire `onError` prop to Sentry/DataDog in production.
 
 ---
 
-## Testing
+Testing
 
 Vitest coverage includes:
 
@@ -110,13 +110,13 @@ Vitest coverage includes:
 
 ---
 
-## Additional docs
+Additional docs
 
 - `docs/Integration-and-Failure-Modes.md`
 
 ---
 
-## Dependencies
+Dependencies
 
 | Package | Purpose |
 |---------|---------|
