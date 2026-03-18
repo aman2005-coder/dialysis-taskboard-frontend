@@ -1,6 +1,17 @@
 # Dialysis Care Plan Taskboard
 
-A React/TypeScript taskboard for managing dialysis patient care plan tasks across three staff roles: Nurse, Dietician, and Social Worker.
+A React/TypeScript taskboard for managing dialysis patient care plan tasks across clinical staff workflows, with optimistic updates, DTO parsing, and resilient failure handling.
+
+---
+
+## Features
+
+- React + TypeScript frontend for dialysis care plan task management
+- Clear separation of API client, DTO parsing, state hooks, and UI components
+- DTO-to-domain parsing to protect the UI from malformed backend data
+- Optimistic task status updates with rollback on server failure
+- Local mock API fallback for development when the backend is unavailable
+- Vitest coverage for parser logic, state mutation behavior, and critical UI flows
 
 ---
 
@@ -18,6 +29,7 @@ Set your backend URL in a `.env` file:
 
 ```
 VITE_API_BASE_URL=http://localhost:3000/api
+VITE_USE_MOCK_API=true
 ```
 
 ---
@@ -80,8 +92,27 @@ src/
 ### Null-Object / default factory
 `createDefaultTask()` is the single source of fallback values. The UI never needs `task?.title ?? "Unknown"` — it's handled once at the parser boundary.
 
+### Partial failure handling
+Patient and task failures are isolated so one failing query does not take down the entire screen. In local development, unreachable API calls can fall back to bundled mock data.
+
 ### Error Boundary
 `TaskErrorBoundary` wraps the task list in `CareBoard.tsx`. A render crash in the task list shows a recovery UI without taking down the patient header or the rest of the page. Wire `onError` prop to Sentry/DataDog in production.
+
+---
+
+## Testing
+
+Vitest coverage includes:
+
+- parser behavior
+- optimistic mutation rollback
+- critical task list UI behavior
+
+---
+
+## Additional docs
+
+- `docs/Integration-and-Failure-Modes.md`
 
 ---
 
@@ -92,4 +123,4 @@ src/
 | `@tanstack/react-query` | Server state, caching, optimistic updates |
 | `sonner` | Toast notifications |
 | `tailwindcss` | Utility-first styling |
-| `vitest` | Unit tests for parsers |
+| `vitest` | Unit and component tests |
