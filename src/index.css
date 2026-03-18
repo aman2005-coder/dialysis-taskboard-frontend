@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth status transitions on task cards */
+@layer utilities {
+  .transition-opacity-fast {
+    transition: opacity 150ms ease;
+  }
+}
